@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:uber_app/src/share/app_text_field.dart';
 import 'package:uber_app/src/share/custom_button.dart';
 import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/style/app_text_style.dart';
 import 'package:uber_app/src/style/social_media_button.dart';
 import 'package:uber_app/src/view/auth/phone_otp_send.dart';
+import 'package:uber_app/src/view/auth/select_user.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,68 +25,46 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                Text(
-                  "Enter Your mobile number",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: AppTextStyle.largeThinkness,
+            Form(
+              child: Column(
+                children: [
+                  TextForm(
+                    title: "Email",
+                    prefixIcon: Icons.alternate_email,
                   ),
-                ),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Container(
-                        height: height * 0.06,
-                        width: width * 0.17,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(10),
-                          // border: Border.all(
-                          //   color: AppColor.blackColor,
-                          // ),
-                        ),
-                      ),
+                  SizedBox(
+                    height: height * 0.01,
+                  ),
+                  TextForm(
+                    title: "Password",
+                    prefixIcon: Icons.key,
+                    suffixIcon: Icons.visibility,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: (){},
+                  child: Text(
+                    "Forgot Password",
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
                     ),
-                    SizedBox(
-                      width: width * 0.07,
-                    ),
-                    Container(
-                      height: height * 0.06,
-                      width: width * 0.7,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(10),
-                          // border: Border.all(
-                          //   color: AppColor.blackColor,
-                          // ),
-                        ),
-                      child: Center(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.phone),
-                            hintText: "Mobile number",
-                            border: InputBorder.none,
-                            suffixIcon: Icon(Icons.person_add)
-                        ),
-                      ),
-                        ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              height: height * 0.01,
-            ),
-            SizedBox(),
             CustomButton(
               text: "Continue",
               height: height * 0.065,
               width: width * 1,
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneoypPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SelectUser()));
               },
               textStyle: TextStyle(
                 color: AppColor.whiteColor,
@@ -97,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: height * 0.02,
+              height: height * 0.04,
             ),
             Row(
               children: [
@@ -107,6 +87,27 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(width: width * 0.03,),
                 Flexible(child: Divider(thickness: 2,)),
               ],
+            ),
+            SizedBox(
+              height: height * 0.02,
+            ),
+            CustomButton(
+              height: height * 0.06,
+              width: width * 1,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColor.blackColor
+                )
+              ),
+              text: "Sign Up",
+              textStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17
+              ),
+              onTap: (){
+
+              },
             ),
             SizedBox(
               height: height * 0.02,
@@ -123,8 +124,8 @@ class _LoginPageState extends State<LoginPage> {
             SocialMediaButton(
                 height: height * 0.065,
                 width: width * 1,
-                title: "Continue with email",
-                imageUrl: "email.png"
+                title: "Continue with Apple",
+                imageUrl: "apple-logo.png"
             ),
           ],
         ),

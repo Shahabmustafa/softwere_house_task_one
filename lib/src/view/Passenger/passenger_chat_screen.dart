@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+
+class PassengerChatPage extends StatefulWidget {
+  const PassengerChatPage({Key? key}) : super(key: key);
+
+  @override
+  State<PassengerChatPage> createState() => _PassengerChatPageState();
+}
+
+class _PassengerChatPageState extends State<PassengerChatPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Chat"),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+          itemCount: 10,
+          itemBuilder: (context,index){
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Card(
+                shape: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(),
+                  title: Text("Shahab Mustafa"),
+                  splashColor: Colors.transparent,
+                  onTap: (){
+
+                  },
+                ),
+              ),
+            );
+          }
+      ),
+    );
+  }
+}

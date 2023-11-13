@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uber_app/src/share/passenger_bottom_navigation_bar.dart';
 import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/view/Driver/driver_car_file.dart';
 
@@ -48,7 +49,7 @@ class _SelectUserState extends State<SelectUser> {
             ),
             InkWell(
               onTap: (){
-
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PassengerBottomNavigatorBar()));
               },
               child: Container(
                 width: width * 1,
