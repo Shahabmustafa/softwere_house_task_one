@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DriverProfile extends StatefulWidget {
@@ -24,6 +25,14 @@ class _DriverProfileState extends State<DriverProfile> {
       appBar: AppBar(
         title: Text("Profile"),
         centerTitle: true,
+        actions: [
+          InkWell(
+            onTap: (){
+              FirebaseAuth.instance.signOut();
+            },
+            child: Icon(Icons.exit_to_app),
+          ),
+        ],
       ),
       body: Column(
         children: [

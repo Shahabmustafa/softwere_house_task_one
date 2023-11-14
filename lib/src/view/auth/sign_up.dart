@@ -18,6 +18,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _key = GlobalKey<FormState>();
   final signUp = Get.put(AuthService());
+  String selectedValue = "Driver";
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -87,6 +88,34 @@ class _SignUpPageState extends State<SignUpPage> {
             SizedBox(
               height: height * 0.04,
             ),
+            Row(
+              children: [
+                Flexible(
+                  child: RadioListTile(
+                    title: Text('Driver'),
+                    value: "Driver",
+                    groupValue: selectedValue,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValue = value!;
+                      });
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: RadioListTile(
+                    title: Text('Passenger'),
+                    value: "Passenger",
+                    groupValue: selectedValue,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValue = value!;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
             Obx((){
               return CustomButton(
                 loading: signUp.loading.value,
@@ -95,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 width: width * 1,
                 onTap: (){
                   if(_key.currentState!.validate()){
-                    signUp.SignIn(context);
+                    signUp.SignIn(context,selectedValue);
                   }
                 },
                 textStyle: TextStyle(

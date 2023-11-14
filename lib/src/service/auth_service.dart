@@ -6,14 +6,22 @@ import 'package:uber_app/src/model/user_model.dart';
 
 class AuthService extends GetxController{
   static final firebaseAuth = FirebaseAuth.instance;
-  static final firebase = FirebaseFirestore.instance.collection("users");
+  static final firebase = FirebaseFirestore.instance;
   RxBool loading = false.obs;
   final userName = TextEditingController().obs;
   final phoneNumber = TextEditingController().obs;
   final email = TextEditingController().obs;
   final password = TextEditingController().obs;
+  final logEmail = TextEditingController().obs;
+  final logPassword = TextEditingController().obs;
 
-  Future<void> SignIn(BuildContext context)async{
+  Future<void> SignIn(BuildContext context,String selectedItem)async{
+    var user;
+    if (selectedItem == "Driver") {
+      user = "Driver";
+    }else if(selectedItem == "Passenger"){
+      user = "Passenger";
+    }
     loading.value = true;
    try{
      await firebaseAuth.createUserWithEmailAndPassword(
@@ -25,11 +33,11 @@ class AuthService extends GetxController{
          userName: userName.value.text,
          email: email.value.text,
          phoneNumber: phoneNumber.value.text,
-         payment: "",
+         payment: "0",
          profileImage: "",
-         type: "",
+         type: selectedItem,
        );
-       firebase.doc(value.user!.uid).set(userModel.toJson());
+       firebase.collection("${user}").doc(value.user!.uid).set(userModel.toJson());
        loading.value = false;
      }).onError((error, stackTrace){
        loading.value = false;
@@ -38,6 +46,18 @@ class AuthService extends GetxController{
    }catch(e){
      loading.value = false;
      print(e);
+   }
+  }
+
+  Future<void> Login(BuildContext context)async{
+    loading.value = true;
+   try{
+     await firebaseAuth.signInWithEmailAndPassword(
+       email: logEmail.value.text,
+       password: logPassword.value.text,
+     );
+   }catch(e){
+     loading.value = false;
    }
   }
 }
