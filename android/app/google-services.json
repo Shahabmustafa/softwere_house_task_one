@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "215536626753",
+    "project_id": "texi-app-f065b",
+    "storage_bucket": "texi-app-f065b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215536626753:android:586c7fbf02638a542faac0",
+        "android_client_info": {
+          "package_name": "com.example.uber_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmYQtY9elUBTyYu6Uco36NKXg9hwsjQl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

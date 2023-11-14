@@ -6,6 +6,7 @@ import 'package:uber_app/src/style/app_text_style.dart';
 import 'package:uber_app/src/style/social_media_button.dart';
 import 'package:uber_app/src/view/auth/phone_otp_send.dart';
 import 'package:uber_app/src/view/auth/select_user.dart';
+import 'package:uber_app/src/view/auth/sign_up.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -106,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontSize: 17
               ),
               onTap: (){
-
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
               },
             ),
             SizedBox(

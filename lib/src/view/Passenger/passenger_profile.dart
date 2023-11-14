@@ -28,7 +28,8 @@ class _PassengerProfileState extends State<PassengerProfile> {
       body: Column(
         children: [
           InkWell(
-
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
             onTap: (){
               showModalBottomSheet(
                 context: context,

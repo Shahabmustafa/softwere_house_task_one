@@ -43,6 +43,13 @@ dependencies:
   cached_network_image: ^3.3.0
   # google Map integration
   google_maps_flutter: ^2.5.0
+  # statemangement getx
+  get: ^4.6.6
+  # firebase
+  firebase_core: ^2.22.0
+  firebase_auth: ^4.13.0
+  firebase_storage: ^11.5.0
+  cloud_firestore: ^4.13.0
 
 dev_dependencies:
   flutter_test:
