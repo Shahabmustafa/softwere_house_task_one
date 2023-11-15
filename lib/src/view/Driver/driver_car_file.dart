@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/instance_manager.dart';
+import 'package:uber_app/src/service/driver_service.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
 import 'package:uber_app/src/share/custom_button.dart';
 import 'package:uber_app/src/style/app_color.dart';
@@ -13,6 +16,9 @@ class DriverCarFile extends StatefulWidget {
 }
 
 class _DriverCarFileState extends State<DriverCarFile> {
+
+  final carDetail = Get.put(DriverService());
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -35,6 +41,7 @@ class _DriverCarFileState extends State<DriverCarFile> {
             ),
             TextForm(
               title: "Car Name",
+              controller: carDetail.carName.value,
               prefixIcon: CupertinoIcons.car,
             ),
             SizedBox(
@@ -42,6 +49,7 @@ class _DriverCarFileState extends State<DriverCarFile> {
             ),
             TextForm(
               title: "Car Color",
+              controller: carDetail.carColor.value,
               prefixIcon: Icons.color_lens,
             ),
             SizedBox(
@@ -49,6 +57,7 @@ class _DriverCarFileState extends State<DriverCarFile> {
             ),
             TextForm(
               title: "Car Model",
+              controller: carDetail.carModel.value,
               prefixIcon: Icons.model_training,
             ),
             SizedBox(
@@ -56,27 +65,32 @@ class _DriverCarFileState extends State<DriverCarFile> {
             ),
             TextForm(
               title: "Car Number",
+              controller: carDetail.carNumber.value,
               prefixIcon: CupertinoIcons.number,
             ),
             SizedBox(
               height: height * 0.04,
             ),
-            CustomButton(
-              text: "Register",
-              height: height * 0.07,
-              width: width * 1,
-              decoration: BoxDecoration(
-                color: AppColor.blackColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              textStyle: TextStyle(
-                color: AppColor.whiteColor,
-                fontWeight: FontWeight.bold,
-              ),
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DriverButtomNavigator()));
-              },
-            ),
+            Obx((){
+              return CustomButton(
+                text: "Register",
+                loading: carDetail.loading.value,
+                height: height * 0.07,
+                width: width * 1,
+                decoration: BoxDecoration(
+                  color: AppColor.blackColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                textStyle: TextStyle(
+                  color: AppColor.whiteColor,
+                  fontWeight: FontWeight.bold,
+                ),
+                onTap: (){
+                  carDetail.addCarDetail(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DriverButtomNavigator()));
+                },
+              );
+            }),
           ],
         ),
       ),

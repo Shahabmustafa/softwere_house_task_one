@@ -43,14 +43,38 @@ class _PassengerProfileState extends State<PassengerProfile> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      imageUrl: data["profileImage"] != null ?
-                      "https://i.pinimg.com/474x/a8/0e/36/a80e3690318c08114011145fdcfa3ddb.jpg" : data["profileImage"],
-                      height: 120,
-                      width: 120,
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircularProgressIndicator(value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    child: InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: (){
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context){
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  leading: Icon(Icons.camera_alt),
+                                  title: Text("Camera"),
+                                ),
+                                ListTile(
+                                  leading: Icon(Icons.photo),
+                                  title: Text("Gallery"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl: data["profileImage"] != null ?
+                        "https://i.pinimg.com/474x/a8/0e/36/a80e3690318c08114011145fdcfa3ddb.jpg" : data["profileImage"],
+                        height: 120,
+                        width: 120,
+                        progressIndicatorBuilder: (context, url, downloadProgress) =>
+                            CircularProgressIndicator(value: downloadProgress.progress),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                   ),
                   Padding(

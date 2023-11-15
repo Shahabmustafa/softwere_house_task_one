@@ -11,7 +11,11 @@ import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/style/social_media_button.dart';
 import 'package:uber_app/src/view/Driver/driver_buttom_navigator.dart';
 import 'package:uber_app/src/view/Passenger/passenger_buttom_navigator.dart';
+import 'package:uber_app/src/view/auth/select_user.dart';
 import 'package:uber_app/src/view/auth/sign_up.dart';
+
+import '../../model/user_model.dart';
+import '../../service/social_media_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -91,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: width * 1,
                 onTap: (){
                   logIn.Login(context).then((value){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => PassengerNavigator()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DriverButtomNavigator()));
                   });
                 },
                 textStyle: TextStyle(
@@ -142,10 +146,30 @@ class _LoginPageState extends State<LoginPage> {
               height: height * 0.02,
             ),
             SocialMediaButton(
-                height: height * 0.065,
-                width: width * 1,
-                title: "Continue with Google",
-                imageUrl: "google.png"
+              height: height * 0.065,
+              width: width * 1,
+              title: "Continue with Google",
+              imageUrl: "google.png",
+              onTap: (){
+                SignInWithGoogle().then((value){
+                  UserModel userModel = UserModel(
+                    userName: value.user!.displayName,
+                    email: value.user!.email,
+                    phoneNumber: value.user!.phoneNumber,
+                    payment: "0",
+                    profileImage: value.user!.photoURL,
+                    type: "",
+                    stats: true,
+                    dateTime: DateTime.now(),
+                    userId: value.user!.uid,
+                  );
+                  FirebaseFirestore.instance.collection("users")
+                  .doc(auth)
+                  .set(userModel.toJson());
+                }).then((value){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SelectUser()));
+                });
+              },
             ),
             SizedBox(
               height: height * 0.01,

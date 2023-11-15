@@ -1,27 +1,36 @@
-
 class UserModel {
+  String? userId;
   String? userName;
   String? email;
   String? phoneNumber;
-  String? profileImage;
   String? payment;
+  String? profileImage;
   String? type;
+  bool? stats;
+  DateTime? dateTime;
 
   UserModel(
-      {this.userName,
+      {
+        this.userId,
+        this.userName,
         this.email,
         this.phoneNumber,
-        this.profileImage,
         this.payment,
-        this.type});
+        this.profileImage,
+        this.type,
+        this.stats,
+        this.dateTime});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
     email = json['email'];
     phoneNumber = json['phoneNumber'];
-    profileImage = json['profileImage'];
     payment = json['payment'];
+    profileImage = json['profileImage'];
     type = json['type'];
+    stats = json['stats'];
+    dateTime = json['dateTime'];
+    userId = json['userId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,9 +38,12 @@ class UserModel {
     data['userName'] = this.userName;
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;
-    data['profileImage'] = this.profileImage;
     data['payment'] = this.payment;
+    data['profileImage'] = this.profileImage;
     data['type'] = this.type;
+    data['stats'] = this.stats;
+    data['dateTime'] = this.dateTime;
+    data['userId'] = this.userId;
     return data;
   }
 }

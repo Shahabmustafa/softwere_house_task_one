@@ -1,6 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:uber_app/src/service/access_service.dart';
+import 'package:uber_app/src/service/splash_service.dart';
 import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/view/splash/started_screen.dart';
 
@@ -13,17 +13,14 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
 
-  isStarted(){
-    Timer(Duration(seconds: 3),(){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => StartedPage()));
-    });
-  }
+  SplashService splashService = SplashService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    isStarted();
+    // splashService.isSplash(context);
+    AccessService().checkCurrentUserRole(context);
   }
   Widget build(BuildContext context) {
     return const Scaffold(

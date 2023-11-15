@@ -34,9 +34,13 @@ class AuthService extends GetxController{
          email: email.value.text,
          phoneNumber: phoneNumber.value.text,
          payment: "0",
-         profileImage: "",
+         profileImage: "https://images.pexels.com/photos/3454298/pexels-photo-3454298.jpeg?auto=compress&cs=tinysrgb&w=800",
          type: selectedItem,
+         stats: true,
+         dateTime: DateTime.now(),
+         userId: value.user!.uid,
        );
+       firebase.collection("users").doc(value.user!.uid).set(userModel.toJson());
        firebase.collection("${user}").doc(value.user!.uid).set(userModel.toJson());
        loading.value = false;
      }).onError((error, stackTrace){
