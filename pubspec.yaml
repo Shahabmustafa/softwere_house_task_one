@@ -66,6 +66,9 @@ dependencies:
   # add paypal payment methode
   flutter_paypal: ^0.2.0
 
+  # add custom floating action button
+  flutter_speed_dial: ^7.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

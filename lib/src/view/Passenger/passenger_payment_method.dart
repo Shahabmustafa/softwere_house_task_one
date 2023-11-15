@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uber_app/src/share/app_text_field.dart';
-import 'package:uber_app/src/share/custom_button.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:uber_app/src/style/app_color.dart';
+import 'package:uber_app/src/style/social_media_button.dart';
 
 class PassengerPaymentMethode extends StatefulWidget {
   const PassengerPaymentMethode({Key? key}) : super(key: key);
@@ -11,6 +13,12 @@ class PassengerPaymentMethode extends StatefulWidget {
 }
 
 class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
+  static final auth = FirebaseAuth.instance.currentUser!.uid;
+
+  Stream documentSnapshot = FirebaseFirestore.instance
+      .collection("Passenger")
+      .doc(auth).snapshots();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -23,142 +31,132 @@ class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Card(
-              child: ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    "assets/images/icon/download.png",
-                    height: 40,
-                    width: 40,
-                  ),
-                ),
-                title: Text("Jazz Cash"),
-                onTap: (){
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: AssetImage("assets/images/icon/download.png"),
+            Expanded(
+              child: StreamBuilder(
+                stream: documentSnapshot,
+                builder: (context,snapshot){
+                  if(snapshot.hasData){
+                    Map<String, dynamic> data = snapshot.data.data() as Map<String, dynamic>;
+                    return Container(
+                      height: height * 0.1,
+                      width: width * 1,
+                      decoration: BoxDecoration(
+                        color: AppColor.greyColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Current Balance",
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
                               ),
-                              SizedBox(
-                                height: height * 0.02,
+                            ),
+                            SizedBox(
+                              height: height * 0.04,
+                            ),
+                            Text(
+                              "PKR ${data["payment"]}",
+                              style: TextStyle(
+                                fontSize: 30,
                               ),
-                              TextForm(
-                                title: "Enter Your Name",
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              TextForm(
-                                title: "Enter Your CNIC",
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              TextForm(
-                                title: "Enter Your Number",
-                              ),
-                              SizedBox(
-                                height: height * 0.04,
-                              ),
-                              CustomButton(
-                                text: "Save",
-                                decoration: BoxDecoration(
-                                  color: AppColor.blackColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                height: height * 0.07,
-                                width: width * 1,
-                                textStyle: TextStyle(
-                                    color: AppColor.whiteColor,
-                                    fontWeight: FontWeight.bold
-                                ),
-                                onTap: (){
-
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                  );
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }else{
+                    return Center(child: CircularProgressIndicator());
+                  }
                 },
               ),
             ),
-            Card(
-              child: ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    "assets/images/icon/easypaisa.png",
-                    height: 40,
-                    width: 40,
-                  ),
-                ),
-                title: Text("Easy Paisa"),
-                onTap: (){
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: AssetImage("assets/images/icon/easypaisa.png"),
-                              ),
-                              SizedBox(
-                                height: height * 0.02,
-                              ),
-                              TextForm(
-                                title: "Enter Your Name",
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              TextForm(
-                                title: "Enter Your CNIC",
-                              ),
-                              SizedBox(
-                                height: height * 0.01,
-                              ),
-                              TextForm(
-                                title: "Enter Your Number",
-                              ),
-                              SizedBox(
-                                height: height * 0.04,
-                              ),
-                              CustomButton(
-                                text: "Save",
-                                decoration: BoxDecoration(
-                                  color: AppColor.blackColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                height: height * 0.07,
-                                width: width * 1,
-                                textStyle: TextStyle(
-                                    color: AppColor.whiteColor,
-                                    fontWeight: FontWeight.bold
-                                ),
-                                onTap: (){
+            SocialMediaButton(
+              height: height * 0.07,
+              width: width * 1,
+              title: "paypal",
+              imageUrl: "paypal.png",
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => UsePaypal(
+                        sandboxMode: true,
+                        clientId:
+                        "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+                        secretKey:
+                        "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+                        returnURL: "https://samplesite.com/return",
+                        cancelURL: "https://samplesite.com/cancel",
+                        transactions: const [
+                          {
+                            "amount": {
+                              "total": '10.12',
+                              "currency": "USD",
+                              "details": {
+                                "subtotal": '10.12',
+                                "shipping": '0',
+                                "shipping_discount": 0
+                              }
+                            },
+                            "description":
+                            "The payment transaction description.",
+                            // "payment_options": {
+                            //   "allowed_payment_method":
+                            //       "INSTANT_FUNDING_SOURCE"
+                            // },
+                            "item_list": {
+                              "items": [
+                                {
+                                  "name": "A demo product",
+                                  "quantity": 1,
+                                  "price": '10.12',
+                                  "currency": "USD"
+                                }
+                              ],
 
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                  );
-                },
-              ),
+                              // shipping address is not required though
+                              "shipping_address": {
+                                "recipient_name": "Jane Foster",
+                                "line1": "Travis County",
+                                "line2": "",
+                                "city": "Austin",
+                                "country_code": "US",
+                                "postal_code": "73301",
+                                "phone": "+00000000",
+                                "state": "Texas"
+                              },
+                            }
+                          }
+                        ],
+                        note: "Contact us for any questions on your order.",
+                        onSuccess: (Map params) async {
+                          print("onSuccess: $params");
+                        },
+                        onError: (error) {
+                          print("onError: $error");
+                        },
+                        onCancel: (params) {
+                          print('cancelled: $params');
+                        }),
+                  ),
+                );
+              },
+            ),
+            SizedBox(
+              height: height * 0.02,
+            ),
+            SocialMediaButton(
+              height: height * 0.07,
+              width: width * 1,
+              title: "Stripe",
+              imageUrl: "stripe.png",
+              onTap: (){
+
+              },
             ),
           ],
         ),

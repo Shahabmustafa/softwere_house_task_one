@@ -1,8 +1,12 @@
 
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:get/get.dart';
+import 'package:uber_app/src/service/driver_service.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
 import 'package:uber_app/src/share/custom_button.dart';
 import 'package:uber_app/src/style/app_color.dart';
@@ -16,6 +20,12 @@ class DriverPaymentMethode extends StatefulWidget {
 }
 
 class _DriverPaymentMethodeState extends State<DriverPaymentMethode> {
+  static final auth = FirebaseAuth.instance.currentUser!.uid;
+
+  Stream documentSnapshot = FirebaseFirestore.instance
+      .collection("Driver")
+      .doc(auth).snapshots();
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
@@ -30,6 +40,48 @@ class _DriverPaymentMethodeState extends State<DriverPaymentMethode> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: documentSnapshot,
+                builder: (context,snapshot){
+                  if(snapshot.hasData){
+                    Map<String, dynamic> data = snapshot.data.data() as Map<String, dynamic>;
+                    return Container(
+                      height: height * 0.1,
+                      width: width * 1,
+                      decoration: BoxDecoration(
+                        color: AppColor.greyColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Current Balance",
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: height * 0.04,
+                            ),
+                            Text(
+                              "PKR ${data["payment"]}",
+                              style: TextStyle(
+                                fontSize: 30,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }else{
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
            SocialMediaButton(
              height: height * 0.07,
              width: width * 1,
