@@ -33,8 +33,8 @@ class SocialMediaButton extends StatelessWidget {
           children: [
             Image.asset(
               "assets/images/icon/$imageUrl",
-              height: 25,
-              width: 25,
+              height: 30,
+              width: 30,
             ),
             SizedBox(
               width: widths * 0.05,

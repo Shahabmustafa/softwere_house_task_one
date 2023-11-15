@@ -25,7 +25,7 @@ class AccessService with ChangeNotifier{
       Timer(Duration(seconds: 3),(){
         Navigator.push(context, MaterialPageRoute(builder: (context) => PassengerNavigator()));
       });
-    }else if(auth!.uid == null){
+    }else if(user["type"] != "Passenger" && user["type"] != "Driver"){
       Timer(Duration(seconds: 3),(){
         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
       });

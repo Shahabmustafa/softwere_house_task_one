@@ -12,7 +12,7 @@ class DriverProfile extends StatefulWidget {
 
 class _DriverProfileState extends State<DriverProfile> {
   static final auth = FirebaseAuth.instance.currentUser!.uid;
-  Stream documentSnapshot = FirebaseFirestore.instance.collection('users').doc(auth).snapshots();
+  Stream documentSnapshot = FirebaseFirestore.instance.collection('Driver').doc(auth).snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _DriverProfileState extends State<DriverProfile> {
                         showModalBottomSheet(
                           context: context,
                           builder: (context){
-                            return Column(
+                            return const Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 ListTile(

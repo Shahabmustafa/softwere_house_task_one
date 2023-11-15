@@ -63,6 +63,9 @@ dependencies:
   # add google signin
   google_sign_in: ^6.1.6
 
+  # add paypal payment methode
+  flutter_paypal: ^0.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

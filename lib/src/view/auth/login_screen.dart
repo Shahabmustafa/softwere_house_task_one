@@ -94,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: height * 0.065,
                 width: width * 1,
                 onTap: (){
-                  logIn.Login(context).then((value){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DriverButtomNavigator()));
-                  });
+                  logIn.Login(context);
                 },
                 textStyle: TextStyle(
                   color: AppColor.whiteColor,

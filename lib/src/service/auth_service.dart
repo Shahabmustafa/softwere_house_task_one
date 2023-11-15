@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:uber_app/src/model/user_model.dart';
+import 'package:uber_app/src/view/Driver/driver_buttom_navigator.dart';
+import 'package:uber_app/src/view/Driver/driver_car_file.dart';
+import 'package:uber_app/src/view/Passenger/passenger_buttom_navigator.dart';
 
 class AuthService extends GetxController{
   static final firebaseAuth = FirebaseAuth.instance;
@@ -41,7 +45,9 @@ class AuthService extends GetxController{
          userId: value.user!.uid,
        );
        firebase.collection("users").doc(value.user!.uid).set(userModel.toJson());
-       firebase.collection("${user}").doc(value.user!.uid).set(userModel.toJson());
+       firebase.collection("${user}").doc(value.user!.uid).set(userModel.toJson()).then((value){
+         Navigator.push(context, MaterialPageRoute(builder: (context) => DriverCarFile()));
+       });
        loading.value = false;
      }).onError((error, stackTrace){
        loading.value = false;
@@ -59,7 +65,21 @@ class AuthService extends GetxController{
      await firebaseAuth.signInWithEmailAndPassword(
        email: logEmail.value.text,
        password: logPassword.value.text,
-     );
+     ).then((value){
+       firebase.collection("users")
+           .doc(value.user!.uid)
+           .get().then((DocumentSnapshot documentSnapshot){
+             if(documentSnapshot.exists){
+               if(documentSnapshot.get("type") == "Driver"){
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => DriverButtomNavigator()));
+               }else{
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => PassengerNavigator()));
+               }
+             }else{
+               print('Document does not exist on the database');
+             }
+       });
+     });
    }catch(e){
      loading.value = false;
    }

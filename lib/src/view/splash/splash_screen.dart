@@ -19,8 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // splashService.isSplash(context);
-    AccessService().checkCurrentUserRole(context);
+    splashService.isSplash(context);
   }
   Widget build(BuildContext context) {
     return const Scaffold(
