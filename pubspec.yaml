@@ -68,6 +68,8 @@ dependencies:
 
   # add custom floating action button
   flutter_speed_dial: ^7.0.0
+  location: ^5.0.3
+  geocoding: ^2.1.1
 
 dev_dependencies:
   flutter_test:

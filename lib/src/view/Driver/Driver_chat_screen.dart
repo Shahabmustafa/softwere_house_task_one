@@ -1,4 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
+import 'package:uber_app/src/service/passenger_service.dart';
 
 class DriverChatPage extends StatefulWidget {
   const DriverChatPage({Key? key}) : super(key: key);
@@ -8,6 +13,16 @@ class DriverChatPage extends StatefulWidget {
 }
 
 class _DriverChatPageState extends State<DriverChatPage> {
+
+  static final auth = FirebaseAuth.instance.currentUser!.uid;
+  final firebase = FirebaseFirestore
+      .instance
+      .collection("Driver")
+      .doc(auth)
+      .collection("chat")
+      .doc()
+      .snapshots();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,13 +30,21 @@ class _DriverChatPageState extends State<DriverChatPage> {
         title: Text("Chat"),
         centerTitle: true,
       ),
-      // body: StreamBuilder(
-      //   // stream: ,
+      body: Center(
+        child: TextButton(
+          onPressed: (){
+          },
+          child: Text("Hello"),
+        ),
+      )
+      // StreamBuilder(
+      //   stream: firebase,
       //   builder: (context,snapshot){
       //     if(snapshot.hasData){
       //       return ListView.builder(
-      //           itemCount: 10,
+      //           itemCount: snapshot.data!.docs.length,
       //           itemBuilder: (context,index){
+      //             var data = snapshot.data!.docs[index];
       //             return Padding(
       //               padding: const EdgeInsets.symmetric(horizontal: 10),
       //               child: Card(
@@ -31,7 +54,7 @@ class _DriverChatPageState extends State<DriverChatPage> {
       //                 ),
       //                 child: ListTile(
       //                   leading: CircleAvatar(),
-      //                   title: Text("Shahab Mustafa"),
+      //                   title: Text(data["userName"]),
       //                   splashColor: Colors.transparent,
       //                   onTap: (){
       //

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uber_app/src/service/access_service.dart';
 import 'package:uber_app/src/service/splash_service.dart';
 import 'package:uber_app/src/style/app_color.dart';
-import 'package:uber_app/src/view/splash/started_screen.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);

@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                   UserModel userModel = UserModel(
                     userName: value.user!.displayName,
                     email: value.user!.email,
-                    phoneNumber: value.user!.phoneNumber,
+                    phoneNumber: "",
                     payment: "0",
                     profileImage: value.user!.photoURL,
                     type: "",

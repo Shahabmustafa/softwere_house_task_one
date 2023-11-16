@@ -25,7 +25,15 @@ class _PassengerProfileState extends State<PassengerProfile> {
         actions: [
           InkWell(
             onTap: (){
-              FirebaseAuth.instance.signOut();
+              FirebaseAuth.instance.signOut().then((value){
+                FirebaseFirestore
+                    .instance
+                    .collection("Passenger")
+                    .doc(auth)
+                    .update({
+                  "stats" : false,
+                });
+              });
             },
             child: Icon(Icons.exit_to_app),
           ),

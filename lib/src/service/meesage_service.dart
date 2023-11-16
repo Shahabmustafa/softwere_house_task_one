@@ -19,6 +19,7 @@ class MessageService with ChangeNotifier{
       String messages,
       String status,
       String profileImage,
+      String userName,
       )async{
     final Message message = Message(
       senderId: auth!.uid,
@@ -31,7 +32,7 @@ class MessageService with ChangeNotifier{
         .collection("chat")
         .doc(auth!.uid)
         .set({
-      "userName" : auth!.displayName,
+      "userName" : userName,
       "status" : status,
       "profileImage" : profileImage,
     });
@@ -43,14 +44,4 @@ class MessageService with ChangeNotifier{
         .collection("message")
         .add(message.toJson());
   }
-
-  // showPassenger(BuildContext context,String senderId){
-  //   firestore.collection("Driver")
-  //       .doc(auth!.uid)
-  //       .collection("chat")
-  //       .doc(senderId)
-  //       .set({
-  //
-  //   });
-  // }
 }
