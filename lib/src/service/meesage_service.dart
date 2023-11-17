@@ -11,14 +11,14 @@ class MessageService with ChangeNotifier{
 
   static final firestore = FirebaseFirestore.instance;
   static final auth = FirebaseAuth.instance.currentUser;
-  List<UserModel> users =[];
+  List<UserModel> users = [];
   UserModel? user;
 
   sendMessage(BuildContext context,
       String reciverId,
       String messages,
-      String status,
       String profileImage,
+      String uid,
       String userName,
       )async{
     final Message message = Message(
@@ -31,13 +31,28 @@ class MessageService with ChangeNotifier{
         .doc(reciverId)
         .collection("chat")
         .doc(auth!.uid)
-        .set({
-      "userName" : userName,
-      "status" : status,
-      "profileImage" : profileImage,
-    });
+        .collection("message")
+        .add(message.toJson());
 
     firestore.collection("Driver")
+        .doc(reciverId)
+        .collection("chat")
+        .doc(auth!.uid)
+        .set({
+      "profileImage" : profileImage,
+      "uid" : uid,
+      "userName" : userName,
+    });
+  }
+
+  sendMessageDriver(String reciverId,String messages){
+    final Message message = Message(
+      senderId: auth!.uid,
+      receiverId: reciverId,
+      content: messages,
+      sentTime: DateTime.now(),
+    );
+    firestore.collection("Passenger")
         .doc(reciverId)
         .collection("chat")
         .doc(auth!.uid)

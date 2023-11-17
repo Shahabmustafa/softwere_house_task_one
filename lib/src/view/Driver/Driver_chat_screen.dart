@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -13,15 +14,7 @@ class DriverChatPage extends StatefulWidget {
 }
 
 class _DriverChatPageState extends State<DriverChatPage> {
-
-  static final auth = FirebaseAuth.instance.currentUser!.uid;
-  final firebase = FirebaseFirestore
-      .instance
-      .collection("Driver")
-      .doc(auth)
-      .collection("chat")
-      .doc()
-      .snapshots();
+  final auth = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -30,45 +23,40 @@ class _DriverChatPageState extends State<DriverChatPage> {
         title: Text("Chat"),
         centerTitle: true,
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: (){
-          },
-          child: Text("Hello"),
-        ),
-      )
-      // StreamBuilder(
-      //   stream: firebase,
-      //   builder: (context,snapshot){
-      //     if(snapshot.hasData){
-      //       return ListView.builder(
-      //           itemCount: snapshot.data!.docs.length,
-      //           itemBuilder: (context,index){
-      //             var data = snapshot.data!.docs[index];
-      //             return Padding(
-      //               padding: const EdgeInsets.symmetric(horizontal: 10),
-      //               child: Card(
-      //                 shape: OutlineInputBorder(
-      //                     borderRadius: BorderRadius.circular(20),
-      //                     borderSide: BorderSide.none
-      //                 ),
-      //                 child: ListTile(
-      //                   leading: CircleAvatar(),
-      //                   title: Text(data["userName"]),
-      //                   splashColor: Colors.transparent,
-      //                   onTap: (){
-      //
-      //                   },
-      //                 ),
-      //               ),
-      //             );
-      //           }
-      //       );
-      //     }else{
-      //       return Center(child: CircularProgressIndicator());
-      //     }
-      //   },
-      // ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Driver").doc(auth).collection("chat").snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context,index){
+                  var data = snapshot.data!.docs[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Card(
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none
+                      ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 50,
+                        ),
+                        title: Text("hello"),
+                        splashColor: Colors.transparent,
+                        onTap: (){
+                          print("object");
+                        },
+                      ),
+                    ),
+                  );
+                }
+            );
+          }else{
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

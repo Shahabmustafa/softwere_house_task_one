@@ -36,7 +36,8 @@ class PassengerService with ChangeNotifier{
         dateTime: data.data()?["dateTime"]
       );
       addUserData(passengerModel);
+    }else{
+      print("Erro");
     }
-    return null;
   }
 }
