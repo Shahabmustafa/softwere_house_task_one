@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_app/src/service/passenger_service.dart';
 import 'package:uber_app/src/style/app_color.dart';
 
 
@@ -25,7 +24,6 @@ class _PassengerMapState extends State<PassengerMap> {
   final firestore = FirebaseFirestore.instance.collection("Passenger").doc(auth);
   LocationData? currentLocation;
   Completer<GoogleMapController> _controller = Completer();
-  PassengerService service = PassengerService();
 
   void getLocation()async{
     Location location = Location();

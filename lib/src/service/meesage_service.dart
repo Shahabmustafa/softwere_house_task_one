@@ -12,14 +12,12 @@ class MessageService with ChangeNotifier{
   static final firestore = FirebaseFirestore.instance;
   static final auth = FirebaseAuth.instance.currentUser;
   List<UserModel> users = [];
+  List<Message> messages = [];
   UserModel? user;
 
-  sendMessage(BuildContext context,
+  sendMessageDriver(
       String reciverId,
       String messages,
-      String profileImage,
-      String uid,
-      String userName,
       )async{
     final Message message = Message(
       senderId: auth!.uid,
@@ -33,19 +31,9 @@ class MessageService with ChangeNotifier{
         .doc(auth!.uid)
         .collection("message")
         .add(message.toJson());
-
-    firestore.collection("Driver")
-        .doc(reciverId)
-        .collection("chat")
-        .doc(auth!.uid)
-        .set({
-      "profileImage" : profileImage,
-      "uid" : uid,
-      "userName" : userName,
-    });
   }
 
-  sendMessageDriver(String reciverId,String messages){
+  sendMessagePassenger(String reciverId,String messages){
     final Message message = Message(
       senderId: auth!.uid,
       receiverId: reciverId,
@@ -58,5 +46,24 @@ class MessageService with ChangeNotifier{
         .doc(auth!.uid)
         .collection("message")
         .add(message.toJson());
+  }
+
+
+  List<Message> getMessage(String receiverId){
+    firestore
+        .collection("Driver")
+        .doc(auth!.uid)
+        .collection("chat")
+        .doc(receiverId)
+        .collection("message")
+        .orderBy("sentTime",descending: false)
+        .snapshots(includeMetadataChanges: true)
+        .listen((message){
+      this.messages = message
+          .docs.map((doc) => Message.fromJson(doc.data()),
+      ).toList();
+      notifyListeners();
+    });
+    return messages;
   }
 }

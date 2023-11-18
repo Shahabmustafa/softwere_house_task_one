@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_app/src/model/passenger_model.dart';
 import 'package:uber_app/src/service/meesage_service.dart';
-import 'package:uber_app/src/service/passenger_service.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
+import 'package:uber_app/src/share/chat_message.dart';
+import 'package:uber_app/src/share/message_bubble.dart';
 import 'package:uber_app/src/style/app_color.dart';
 
 class PassengerMessage extends StatefulWidget {
@@ -21,18 +22,10 @@ class PassengerMessage extends StatefulWidget {
 class _PassengerMessageState extends State<PassengerMessage> {
   final messageController = TextEditingController();
   MessageService messageService = MessageService();
-  PassengerModel? passengerModel;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchUserData();
-  }
-  Future<void> _fetchUserData() async {
-    PassengerModel? currentUserData = await PassengerService().fetchUserData();
-    setState(() {
-    passengerModel = currentUserData;
-    });
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,12 +76,10 @@ class _PassengerMessageState extends State<PassengerMessage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context,index){
-              },
-            ),
-          ),
+          child: ChatMessage(
+          receiverId: widget.userId,
+      ),
+        ),
           Row(
             children: [
               Expanded(
@@ -108,15 +99,10 @@ class _PassengerMessageState extends State<PassengerMessage> {
                   child: IconButton(
                     onPressed: (){
                       if(messageController.text.isNotEmpty){
-                        // messageService.sendMessage(
-                        //   context,
-                        //   widget.userId,
-                        //   messageController.text,
-                        //   passengerModel!.userName.toString(),
-                        //   passengerModel!.profileImage.toString(),
-                        //   passengerModel!.userId.toString(),
-                        // );
-                        print(passengerModel!.userName.toString());
+                        messageService.sendMessageDriver(
+                            widget.userId,
+                            messageController.text
+                        );
                         messageController.clear();
                       }
                     },

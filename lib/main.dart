@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_app/firebase_options.dart';
-import 'package:uber_app/src/service/passenger_service.dart';
+import 'package:uber_app/src/service/meesage_service.dart';
 import 'package:uber_app/src/view/splash/splash_screen.dart';
 
 
@@ -22,12 +22,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-            create: (_) => PassengerService(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => MessageService(),
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uber_app/src/service/meesage_service.dart';
-import 'package:uber_app/src/service/passenger_service.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
 import 'package:uber_app/src/style/app_color.dart';
 
@@ -17,7 +16,7 @@ class DriverMessage extends StatefulWidget {
 }
 
 class _DriverMessageState extends State<DriverMessage> {
-  final messageController = TextEditingController();
+  final messageControllers = TextEditingController();
   MessageService messageService = MessageService();
   @override
   void initState() {
@@ -25,7 +24,6 @@ class _DriverMessageState extends State<DriverMessage> {
     super.initState();
   }
   Widget build(BuildContext context) {
-    final currentUserData = Provider.of<PassengerService>(context);
     return Scaffold(
       appBar: AppBar(
         title:  Row(
@@ -88,7 +86,7 @@ class _DriverMessageState extends State<DriverMessage> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextForm(
                     title: "Aa...",
-                    controller: messageController,
+                    controller: messageControllers,
                     suffixIcon: Icons.camera_alt,
                     prefixIcon: CupertinoIcons.link,
                   ),
@@ -99,16 +97,12 @@ class _DriverMessageState extends State<DriverMessage> {
                 child: CircleAvatar(
                   child: IconButton(
                     onPressed: (){
-                      if(messageController.text.isNotEmpty){
-                        messageController.clear();
-                        // messageService.sendMessage(
-                        //     context,
-                        //     widget.userId,
-                        //     messageController.text,
-                        //     currentUserData.userData[0].profileImage.toString(),
-                        //     currentUserData.userData[0].stats as bool,
-                        //     currentUserData.userData[0].userName.toString(),
-                        // );
+                      if(messageControllers.text.isNotEmpty){
+                        messageService.sendMessagePassenger(
+                          widget.userId,
+                          messageControllers.text.trim(),
+                        );
+                        messageControllers.clear();
                       }
                     },
                     icon: Icon(Icons.near_me),

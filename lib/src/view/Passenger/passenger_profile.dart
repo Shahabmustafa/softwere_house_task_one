@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uber_app/src/service/passenger_service.dart';
 
 class PassengerProfile extends StatefulWidget {
   const PassengerProfile({Key? key}) : super(key: key);
@@ -17,10 +16,13 @@ class _PassengerProfileState extends State<PassengerProfile> {
   Stream documentSnapshot = FirebaseFirestore.instance.collection('Passenger').doc(auth).snapshots();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height;
     final width = MediaQuery.sizeOf(context).width;
-    final currentUser = Provider.of<PassengerService>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Profile"),
@@ -97,7 +99,7 @@ class _PassengerProfileState extends State<PassengerProfile> {
                       ),
                       child: ListTile(
                         leading: Icon(Icons.person),
-                        title: Text(currentUser.userData[0].userName.toString()),
+                        title: Text("Name"),
                         subtitle: Text(data["userName"]),
                       ),
                     ),
@@ -168,7 +170,6 @@ class _PassengerProfileState extends State<PassengerProfile> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-
         },
         child: Icon(Icons.edit),
       ),
