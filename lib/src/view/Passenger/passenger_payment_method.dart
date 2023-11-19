@@ -5,6 +5,8 @@ import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/style/social_media_button.dart';
 
+import '../../service/payment_methode.dart';
+
 class PassengerPaymentMethode extends StatefulWidget {
   const PassengerPaymentMethode({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class PassengerPaymentMethode extends StatefulWidget {
 
 class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
   static final auth = FirebaseAuth.instance.currentUser!.uid;
+  PaymentMethodeService paymentMethodeService = PaymentMethodeService();
 
   Stream documentSnapshot = FirebaseFirestore.instance
       .collection("Passenger")
@@ -155,7 +158,7 @@ class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
               title: "Stripe",
               imageUrl: "stripe.png",
               onTap: (){
-
+                paymentMethodeService.payment();
               },
             ),
           ],

@@ -70,6 +70,9 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   location: ^5.0.3
   geocoding: ^2.1.1
+  flutter_stripe: ^9.5.0+1
+  flutter_dotenv: ^5.1.0
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:
