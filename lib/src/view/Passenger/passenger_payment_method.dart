@@ -1,11 +1,13 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:uber_app/src/style/app_color.dart';
 import 'package:uber_app/src/style/social_media_button.dart';
-
-import '../../service/payment_methode.dart';
+import 'package:http/http.dart' as http;
 
 class PassengerPaymentMethode extends StatefulWidget {
   const PassengerPaymentMethode({Key? key}) : super(key: key);
@@ -16,7 +18,6 @@ class PassengerPaymentMethode extends StatefulWidget {
 
 class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
   static final auth = FirebaseAuth.instance.currentUser!.uid;
-  PaymentMethodeService paymentMethodeService = PaymentMethodeService();
 
   Stream documentSnapshot = FirebaseFirestore.instance
       .collection("Passenger")
@@ -158,12 +159,116 @@ class _PassengerPaymentMethodeState extends State<PassengerPaymentMethode> {
               title: "Stripe",
               imageUrl: "stripe.png",
               onTap: (){
-                paymentMethodeService.payment();
+                makePayment();
               },
             ),
           ],
         ),
       ),
     );
+  }
+  Map<String,dynamic>? paymentIntent;
+
+  var secretKey = "sk_test_51OE8EMCakpkmS4wZ10r9p2j0ArBzBUd4UdZloBV3op85XVIIxdy0yCvaHwA3b1ZUHxW9dR47Gk8rzI3FTSbykAve00sIO1QJFE";
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+
+      // TODO: Request body
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+      // TODO: POST request to stripe
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer ' + secretKey, //SecretKey used here
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      log('Payment Intent Body->>> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (err) {
+      // ignore: avoid_print
+      log('err charging user: ${err.toString()}');
+    }
+  }
+
+  calculateAmount(String amount) {
+    final calculatedAmout = (int.parse(amount)) * 1000;
+    return calculatedAmout.toString();
+  }
+
+  displayPaymentSheet(BuildContext context) async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) {
+        showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Text("Payment Successfull"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+
+        // TODO: update payment intent to null
+        paymentIntent = null;
+      }).onError((error, stackTrace) {
+        String ss = "exception 2 :$error";
+        String s2 = "reason :$stackTrace";
+      });
+    } on StripeException catch (e) {
+      print('Error is:---> $e');
+      String ss = "exception 3 :$e";
+    } catch (e) {
+      log('$e');
+    }
+  }
+
+  Future<void> makePayment() async {
+    try {
+
+      // TODO: Create Payment intent
+      paymentIntent = await createPaymentIntent('10', 'INR');
+
+      // TODO: Initialte Payment Sheet
+      await Stripe.instance
+          .initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent!['client_secret'],
+          applePay: null,
+          googlePay: null,
+          style: ThemeMode.light,
+          merchantDisplayName: 'Shahab Mustafa',
+        ),
+      )
+          .then((value) {
+        log("Success");
+      });
+
+      // TODO: now finally display payment sheeet
+      displayPaymentSheet(context); // Payment Sheet
+    } catch (e, s) {
+      String ss = "exception 1 :$e";
+      String s2 = "reason :$s";
+      log("exception 1:$e");
+    }
   }
 }

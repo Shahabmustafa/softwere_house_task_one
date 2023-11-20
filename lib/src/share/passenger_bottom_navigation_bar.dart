@@ -8,6 +8,8 @@ import 'package:uber_app/src/view/Passenger/passenger_map.dart';
 import 'package:uber_app/src/view/Passenger/passenger_payment_method.dart';
 import 'package:uber_app/src/view/Passenger/passenger_profile.dart';
 
+import '../view/Passenger/show_driver_list.dart';
+
 class PassengerBottomNavigatorBar extends StatefulWidget {
   const PassengerBottomNavigatorBar({Key? key}) : super(key: key);
 
@@ -19,7 +21,7 @@ class _PassengerBottomNavigatorBarState extends State<PassengerBottomNavigatorBa
   final controller = PersistentTabController(initialIndex: 0);
   List<Widget> _buildScreen(){
     return [
-      PassengerMap(),
+      ShowDriverList(),
       PassengerHistory(),
       PassengerChatPage(),
       PassengerPaymentMethode(),

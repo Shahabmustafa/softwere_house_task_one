@@ -2,7 +2,7 @@ class Message {
   final String senderId;
   final String receiverId;
   final String content;
-  final DateTime sentTime;
+  final String sentTime;
 
   const Message({
     required this.senderId,
@@ -15,7 +15,7 @@ class Message {
       Message(
         receiverId: json['receiverId'],
         senderId: json['senderId'],
-        sentTime: json['sentTime'].toDate(),
+        sentTime: json['sentTime'],
         content: json['content'],
       );
 

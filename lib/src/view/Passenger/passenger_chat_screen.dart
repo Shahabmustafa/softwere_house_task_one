@@ -13,7 +13,7 @@ class PassengerChatPage extends StatefulWidget {
 }
 
 class _PassengerChatPageState extends State<PassengerChatPage> {
-  final firestore = FirebaseFirestore.instance.collection("Driver").snapshots();
+  final firestore = FirebaseFirestore.instance.collection("users").where("type", isEqualTo: "Driver").snapshots();
   @override
   Widget build(BuildContext context) {
     final heigth = MediaQuery.sizeOf(context).height;

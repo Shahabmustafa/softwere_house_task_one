@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uber_app/src/service/meesage_service.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
+import 'package:uber_app/src/share/message_bubble.dart';
 import 'package:uber_app/src/style/app_color.dart';
+import '../../model/message_model.dart';
 
 class DriverMessage extends StatefulWidget {
   DriverMessage({Key? key,required this.userName,required this.profileImage,required this.stats,required this.userId}) : super(key: key);
@@ -16,8 +18,8 @@ class DriverMessage extends StatefulWidget {
 }
 
 class _DriverMessageState extends State<DriverMessage> {
-  final messageControllers = TextEditingController();
-  MessageService messageService = MessageService();
+  final messageController = TextEditingController();
+  List<Message> _list = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -72,10 +74,26 @@ class _DriverMessageState extends State<DriverMessage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context,index){
-                return Center(child: Text("Hello"));
+            child: StreamBuilder(
+              stream: MessageService.getAllMessages(widget.userId),
+              builder: (context,snapshot){
+                if(snapshot.hasData){
+                  final data = snapshot.data?.docs;
+                  _list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+                  if(_list.isNotEmpty){
+                    return ListView.builder(
+                      itemCount: _list.length,
+                      itemBuilder: (context,index){
+                        return MessageCard(message: _list[index]);
+                      },
+                    );
+                  }else{
+                    return Center(child: Text("Say Hello!"));
+                  }
+                }else{
+                  return SizedBox();
+                }
+                return SizedBox();
               },
             ),
           ),
@@ -86,7 +104,7 @@ class _DriverMessageState extends State<DriverMessage> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextForm(
                     title: "Aa...",
-                    controller: messageControllers,
+                    controller: messageController,
                     suffixIcon: Icons.camera_alt,
                     prefixIcon: CupertinoIcons.link,
                   ),
@@ -97,12 +115,12 @@ class _DriverMessageState extends State<DriverMessage> {
                 child: CircleAvatar(
                   child: IconButton(
                     onPressed: (){
-                      if(messageControllers.text.isNotEmpty){
-                        messageService.sendMessagePassenger(
+                      if(messageController.text.isNotEmpty){
+                        MessageService.sendMessage(
                           widget.userId,
-                          messageControllers.text.trim(),
+                          messageController.text,
                         );
-                        messageControllers.clear();
+                        messageController.clear();
                       }
                     },
                     icon: Icon(Icons.near_me),

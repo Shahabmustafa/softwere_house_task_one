@@ -1,44 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:uber_app/src/model/message_model.dart';
-import 'package:uber_app/src/style/app_color.dart';
+import 'package:flutter/services.dart';
+import 'package:uber_app/src/service/meesage_service.dart';
 
-class MessagesBubble extends StatelessWidget {
-  MessagesBubble({Key? key,this.isMe = false,this.message}) : super(key: key);
-  bool isMe;
-  Message? message;
+import '../model/message_model.dart';
+
+// for showing single message details
+class MessageCard extends StatefulWidget {
+  const MessageCard({super.key, required this.message});
+
+  final Message message;
+
+  @override
+  State<MessageCard> createState() => _MessageCardState();
+}
+
+class _MessageCardState extends State<MessageCard> {
+
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: isMe ? Alignment.topRight : Alignment.topLeft,
-      child: Container(
-        margin: EdgeInsets.only(
-          top: 10,
-          right: 10,
-          left: 10,
-        ),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: isMe ? Colors.blue : Colors.grey,
-          borderRadius: isMe ?
-          BorderRadius.only(
-            topLeft: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ) :
-          BorderRadius.only(
-            topRight: Radius.circular(30),
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
+    final mq = MediaQuery.of(context).size;
+    bool isMe = MessageService.user.uid != widget.message.receiverId;
+    return isMe ? _blueMessage() : _greenMessage();
+  }
+
+  Widget _blueMessage() {
+    final mq = MediaQuery.of(context).size;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        //message content
+        Flexible(
+          child: Container(
+            padding: EdgeInsets.all(mq.width * .04),
+            margin: EdgeInsets.symmetric(
+                horizontal: mq.width * .04, vertical: mq.height * .01),
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 221, 245, 255),
+                border: Border.all(color: Colors.lightBlue),
+                //making borders curved
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30))),
+            child:
+            Text(widget.message.content,style: const TextStyle(fontSize: 15, color: Colors.black87),)
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-          children: [
-            Text(message!.content.toString(),style: TextStyle(color: AppColor.whiteColor),)
-          ],
+      ],
+    );
+  }
+
+  Widget _greenMessage() {
+    final mq = MediaQuery.of(context).size;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        //message content
+        Flexible(
+          child: Container(
+            padding: EdgeInsets.all(mq.width * .03),
+            margin: EdgeInsets.symmetric(
+                horizontal: mq.width * .04, vertical: mq.height * .01),
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 218, 255, 176),
+                border: Border.all(color: Colors.lightGreen),
+                //making borders curved
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomRight: Radius.circular(30))),
+            child:Text(widget.message.content,
+              style: const TextStyle(fontSize: 15, color: Colors.black87),),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

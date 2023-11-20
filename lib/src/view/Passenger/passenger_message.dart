@@ -9,6 +9,8 @@ import 'package:uber_app/src/share/chat_message.dart';
 import 'package:uber_app/src/share/message_bubble.dart';
 import 'package:uber_app/src/style/app_color.dart';
 
+import '../../model/message_model.dart';
+
 class PassengerMessage extends StatefulWidget {
   PassengerMessage({Key? key,required this.userName,required this.profileImage,required this.stats,required this.userId}) : super(key: key);
   String profileImage;
@@ -21,7 +23,7 @@ class PassengerMessage extends StatefulWidget {
 
 class _PassengerMessageState extends State<PassengerMessage> {
   final messageController = TextEditingController();
-  MessageService messageService = MessageService();
+  List<Message> _list = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -76,8 +78,27 @@ class _PassengerMessageState extends State<PassengerMessage> {
       body: Column(
         children: [
           Expanded(
-          child: ChatMessage(
-          receiverId: widget.userId,
+          child: StreamBuilder(
+            stream: MessageService.getAllMessages(widget.userId),
+            builder: (context,snapshot){
+              if(snapshot.hasData){
+                final data = snapshot.data?.docs;
+                _list = data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+                if(_list.isNotEmpty){
+                  return ListView.builder(
+                    itemCount: _list.length,
+                    itemBuilder: (context,index){
+                      return MessageCard(message: _list[index]);
+                    },
+                  );
+                }else{
+                  return Center(child: Text("Say Hello!"));
+                }
+              }else{
+                return SizedBox();
+              }
+              return SizedBox();
+            },
       ),
         ),
           Row(
@@ -99,9 +120,9 @@ class _PassengerMessageState extends State<PassengerMessage> {
                   child: IconButton(
                     onPressed: (){
                       if(messageController.text.isNotEmpty){
-                        messageService.sendMessageDriver(
+                        MessageService.sendMessage(
                             widget.userId,
-                            messageController.text
+                            messageController.text,
                         );
                         messageController.clear();
                       }
