@@ -3,9 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:uber_app/src/share/app_text_field.dart';
 import 'package:uber_app/src/share/custom_button.dart';
 import 'package:uber_app/src/style/app_color.dart';
+
+import '../auth/login_screen.dart';
 
 class DriverProfile extends StatefulWidget {
   const DriverProfile({Key? key}) : super(key: key);
@@ -29,7 +32,15 @@ class _DriverProfileState extends State<DriverProfile> {
         actions: [
           InkWell(
             onTap: (){
-              FirebaseAuth.instance.signOut();
+              FirebaseAuth.instance.signOut().then((value){
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: LoginPage(),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+
+              });
             },
             child: Icon(Icons.exit_to_app),
           ),

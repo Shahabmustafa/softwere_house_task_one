@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
+import 'package:uber_app/src/view/auth/login_screen.dart';
 
 class PassengerProfile extends StatefulWidget {
   const PassengerProfile({Key? key}) : super(key: key);
@@ -38,6 +40,14 @@ class _PassengerProfileState extends State<PassengerProfile> {
                     .update({
                   "stats" : false,
                 });
+              }).then((value){
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: LoginPage(),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+
               });
             },
             child: Icon(Icons.exit_to_app),

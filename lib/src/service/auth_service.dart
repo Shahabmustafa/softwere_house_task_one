@@ -8,6 +8,8 @@ import 'package:uber_app/src/view/Driver/driver_buttom_navigator.dart';
 import 'package:uber_app/src/view/Driver/driver_car_file.dart';
 import 'package:uber_app/src/view/Passenger/passenger_buttom_navigator.dart';
 
+import 'firebase_service/notification_service.dart';
+
 class AuthService extends GetxController{
   static final firebaseAuth = FirebaseAuth.instance;
   static final firebase = FirebaseFirestore.instance;
@@ -18,6 +20,8 @@ class AuthService extends GetxController{
   final password = TextEditingController().obs;
   final logEmail = TextEditingController().obs;
   final logPassword = TextEditingController().obs;
+  static final notification = NotificationService();
+
 
   Future<void> SignIn(BuildContext context,String selectedItem)async{
     var user;
@@ -31,7 +35,9 @@ class AuthService extends GetxController{
      await firebaseAuth.createUserWithEmailAndPassword(
        email: email.value.text,
        password: password.value.text,
-     ).then((value){
+     ).then((value)async{
+       await notification.getToken();
+       await notification.getToken();
        print(value);
        UserModel userModel = UserModel(
          userName: userName.value.text,
@@ -49,6 +55,8 @@ class AuthService extends GetxController{
          Navigator.push(context, MaterialPageRoute(builder: (context) => DriverCarFile()));
        });
        loading.value = false;
+       email.value.clear();
+       password.value.clear();
      }).onError((error, stackTrace){
        loading.value = false;
        print(error);
@@ -65,7 +73,10 @@ class AuthService extends GetxController{
      await firebaseAuth.signInWithEmailAndPassword(
        email: logEmail.value.text,
        password: logPassword.value.text,
-     ).then((value){
+     ).then((value)async{
+       await notification.getToken();
+       await notification.getToken();
+       loading.value = false;
        firebase.collection("users")
            .doc(value.user!.uid)
            .get().then((DocumentSnapshot documentSnapshot){
@@ -78,6 +89,8 @@ class AuthService extends GetxController{
              }else{
                print('Document does not exist on the database');
              }
+             logEmail.value.clear();
+             logPassword.value.clear();
        });
      });
    }catch(e){

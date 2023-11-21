@@ -29,7 +29,7 @@ class UserModel {
     profileImage = json['profileImage'];
     type = json['type'];
     stats = json['stats'];
-    dateTime = json['dateTime'];
+    dateTime = json['dateTime'].toDate();
     userId = json['userId'];
   }
 

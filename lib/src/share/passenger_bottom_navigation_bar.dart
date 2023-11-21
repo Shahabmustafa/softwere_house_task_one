@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:uber_app/src/style/app_color.dart';
-import 'package:uber_app/src/view/Passenger/passenger_chat_screen.dart';
 import 'package:uber_app/src/view/Passenger/passenger_history.dart';
-import 'package:uber_app/src/view/Passenger/passenger_map.dart';
 import 'package:uber_app/src/view/Passenger/passenger_payment_method.dart';
 import 'package:uber_app/src/view/Passenger/passenger_profile.dart';
 
 import '../view/Passenger/show_driver_list.dart';
+import '../view/chat/chats_screen.dart';
 
 class PassengerBottomNavigatorBar extends StatefulWidget {
   const PassengerBottomNavigatorBar({Key? key}) : super(key: key);
@@ -23,7 +22,7 @@ class _PassengerBottomNavigatorBarState extends State<PassengerBottomNavigatorBa
     return [
       ShowDriverList(),
       PassengerHistory(),
-      PassengerChatPage(),
+      ChatsPage(),
       PassengerPaymentMethode(),
       PassengerProfile(),
     ];

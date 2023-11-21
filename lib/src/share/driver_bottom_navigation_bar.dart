@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:uber_app/src/style/app_color.dart';
-import 'package:uber_app/src/view/Driver/Driver_chat_screen.dart';
 import 'package:uber_app/src/view/Driver/driver_history.dart';
 import 'package:uber_app/src/view/Driver/driver_map.dart';
 import 'package:uber_app/src/view/Driver/driver_payment_method.dart';
 import 'package:uber_app/src/view/Driver/driver_profile.dart';
+
+import '../view/chat/chats_screen.dart';
 
 class DriverBottomNavigatorBar extends StatefulWidget {
   const DriverBottomNavigatorBar({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _DriverBottomNavigatorBarState extends State<DriverBottomNavigatorBar> {
     return [
       DriverMap(),
       DriverHistory(),
-      DriverChatPage(),
+      ChatsPage(),
       DriverPaymentMethode(),
       DriverProfile(),
     ];
